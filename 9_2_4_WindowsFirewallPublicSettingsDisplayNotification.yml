@@ -1,0 +1,10 @@
+---
+- name: Cambiar configuraciones del Firewall (WindowsFirewallPublicSettingsDisplayNotification)
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil Public
+      win_shell: Get-NetFirewallProfile -Profile Public
+
+    - name: Modificar política de WindowsFirewallPublicSettingsDisplayNotification
+      win_shell: Set-NetFirewallProfile -Public Private -DefaultInboundAction Block
