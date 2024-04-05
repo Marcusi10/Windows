@@ -7,4 +7,4 @@
       win_shell: Get-NetFirewallProfile -Profile Public
 
     - name: Modificar política de WindowsFirewallPublicSettingsDisplayNotification
-      win_shell: Set-NetFirewallProfile -Public Private -DefaultInboundAction Block
+      win_shell: Set-NetFirewallProfile -Public -DefaultInboundAction Block
