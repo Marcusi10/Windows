@@ -1,0 +1,10 @@
+---
+- name: Cambiar políticas de contraseñas en Windows Server (WindowsFirewallDomainLoggingSizeLimit(KB))
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
+      win_shell: Get-NetFirewallProfile -Profile Domain
+
+    - name: Modificar política de WindowsFirewallDomainLoggingSizeLimit(KB)
+      win_shell: Set-NetFirewallProfile -Profile Domain -LogMaxSizeKilobytes 16384
