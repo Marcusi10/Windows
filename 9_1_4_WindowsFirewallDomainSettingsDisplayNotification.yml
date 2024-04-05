@@ -1,10 +1,10 @@
 ---
-- name: Cambiar políticas de contraseñas en Windows Server (WindowsFirewallDomainInbound)
+- name: Cambiar políticas de contraseñas en Windows Server (WindowsFirewallDomainSettingsDisplayNotification)
   hosts: all
   gather_facts: no
   tasks:
     - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
       win_shell: Get-NetFirewallProfile -Profile Domain
 
-    - name: Modificar política de WindowsFirewallDomainInbound
+    - name: Modificar política de WindowsFirewallDomainSettingsDisplayNotification
       win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen true
