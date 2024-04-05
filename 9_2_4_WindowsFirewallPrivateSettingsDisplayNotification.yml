@@ -7,4 +7,4 @@
       win_shell: Get-NetFirewallProfile -Profile Private
 
     - name: Modificar política de WindowsFirewallPrivateSettingsDisplayNotification
-      win_shell: Set-NetFirewallProfile -Profile Private -NotifyOnListen True
+      win_shell: Set-NetFirewallProfile -Profile Private -NotifyOnListen False
