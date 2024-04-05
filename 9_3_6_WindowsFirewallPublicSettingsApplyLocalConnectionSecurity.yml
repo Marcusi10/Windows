@@ -1,0 +1,10 @@
+---
+- name: Cambiar configuraciones del Firewall (WindowsFirewallPublicSettingsApplyLocalConnectionSecurity)
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil Public
+      win_shell: Get-NetFirewallProfile -Profile Public
+
+    - name: Modificar política de WindowsFirewallPublicSettingsApplyLocalConnectionSecurity)
+      win_shell: Set-NetFirewallProfile -Profile Public -AllowLocalFirewallRules True
