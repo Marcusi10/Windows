@@ -7,4 +7,4 @@
       win_shell: Get-NetFirewallProfile -Profile Domain
 
     - name: Modificar política de WindowsFirewallDomainSettingsDisplayNotification
-      win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen true
+      win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen True
