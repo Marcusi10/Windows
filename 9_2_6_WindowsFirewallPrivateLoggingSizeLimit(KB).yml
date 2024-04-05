@@ -4,7 +4,7 @@
   gather_facts: no
   tasks:
     - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
-      win_shell: Get-NetFirewallProfile -Profile Domain
+      win_shell: Get-NetFirewallProfile -Profile Private
 
     - name: Modificar política de WindowsFirewallPrivateLoggingSizeLimit(KB)
-      win_shell: Set-NetFirewallProfile -Profile Domain -LogMaxSizeKilobytes 16384
+      win_shell: Set-NetFirewallProfile -Profile Private -LogMaxSizeKilobytes 16384
