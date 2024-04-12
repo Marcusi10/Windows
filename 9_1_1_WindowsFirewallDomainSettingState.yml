@@ -1,4 +1,4 @@
-- name: Cambiar políticas de contraseñas en Windows Server 
+- name: Cambiar políticas de contraseñas en Windows Server
   hosts: all
   gather_facts: no
   tasks:
