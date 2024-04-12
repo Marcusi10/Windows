@@ -1,0 +1,9 @@
+- name: Cambiar políticas de contraseñas en Windows Server 
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
+      win_shell: Get-NetFirewallProfile -Profile Domain
+
+    - name: Modificar política de conexiones salientes en el perfil de Dominio
+      win_shell: Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
