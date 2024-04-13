@@ -1,0 +1,6 @@
+- name: Cambiar la configuración del Firewall de Windows Server
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Modificar la configuración de registro de paquetes eliminados en el Firewall Privado
+      win_shell: Set-NetFirewallProfile -Profile Private -LogDroppedConnections Yes
