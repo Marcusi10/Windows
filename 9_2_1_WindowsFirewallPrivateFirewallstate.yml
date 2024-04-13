@@ -1,0 +1,11 @@
+- name: Cambiar políticas de contraseñas en Windows Server
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ver la configuración actual del estado del firewall en el perfil de Private
+      win_shell: Get-NetFirewallProfile -Profile Private
+      register: firewall_profile_private
+
+    - name: Modificar el estado del firewall a 'On' en el perfil de Private
+      win_shell: Set-NetFirewallProfile -Profile Private -Enabled True
+      when: "'Firewall state: On' not in firewall_profile_private.stdout"
