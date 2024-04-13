@@ -1,0 +1,11 @@
+- name: Ensure Windows Firewall Private Profile Logging Name is set
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Set Windows Firewall Private Profile Logging Name
+      win_firewall_rule:
+        profile: private
+        name: "Windows Firewall: Private: Logging: Name"
+        localport: all
+        action: allow
+        log_name: "%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log"
