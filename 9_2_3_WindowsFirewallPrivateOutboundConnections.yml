@@ -1,0 +1,11 @@
+- name: Cambiar políticas de cortafuegos en Windows Server 
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Establecer la configuración de 'Outbound connections' en 'Allow'
+      win_firewall_rule:
+        name: "Allow outbound connections for Private profile"
+        profile: "private"
+        direction: "out"
+        action: "allow"
+        state: "enabled"
