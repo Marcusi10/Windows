@@ -1,6 +1,6 @@
 - name: Ping todos los hosts de ansible
   hosts: all
-  become: all
+  become: no
   gather_facts: no
   tasks:
     - name: Ping test
