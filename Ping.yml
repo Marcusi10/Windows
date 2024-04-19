@@ -1,2 +1,9 @@
-- name: Ping test hosts windows
+- name: Ping todos los hosts de ansible
+  hosts: all
+  become: all
+  gather_facts: no
+  tasks:
+    - name: Ping test
+      win_ping:
 
+  
