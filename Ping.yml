@@ -1,5 +1,5 @@
 - name: Ping todos los hosts de ansible
-  hosts: WIN-8JEAH8BM8GO
+  hosts: all
   become: no
   gather_facts: no
   tasks:
