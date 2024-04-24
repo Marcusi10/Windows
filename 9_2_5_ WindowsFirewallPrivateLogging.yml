@@ -1,26 +1,22 @@
 ---
-- name: Cambiar configuración de firewall en Windows Server
+- name: Ensure Windows Firewall Logging Name for Private Profile
   hosts: all
   gather_facts: no
   tasks:
-    - name: Ver la configuración actual del perfil de firewall privado
+    - name: Get current Windows Firewall Profile settings for Private
       win_shell: Get-NetFirewallProfile -Profile Private
-      register: firewall_private_profile
+      register: current_firewall_profile
 
-    - name: Establecer ruta de registro para el perfil privado
-      win_shell: |
-        Set-NetFirewallProfile -Profile Private -LogFileName "%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log"
-      when: "'LogFileName' not in firewall_private_profile.stdout or '%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' not in firewall_private_profile.stdout"
+    - name: Set Logging Name to %SystemRoot%\System32\logfiles\firewall\privatefw.log
+      win_shell: Set-NetFirewallProfile -Profile Private -LogFileName "%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log"
+      when: "'%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' not in current_firewall_profile.stdout"
     
-    - name: Asegurar la ruta de registro en el perfil privado
+    - name: Confirm Windows Firewall Logging Path for Private Profile
       win_shell: Get-NetFirewallProfile -Profile Private
-      register: updated_firewall_private_profile
+      register: updated_firewall_profile
 
-    - name: Comprobar que la ruta de registro está configurada correctamente
+    - name: Assert Logging Path is set correctly for Private Profile
       assert:
         that:
-          - "'%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' in updated_firewall_private_profile.stdout"
-        fail_msg: "La ruta de registro para el perfil privado no está configurada correctamente."
-
-    - name: Desactivar notificaciones de escucha en el perfil privado
-      win_shell: Set-NetFirewallProfile -Profile Private -NotifyOnListen False
+          - "'%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' in updated_firewall_profile.stdout"
+        fail_msg: "The Logging Path for the Private Profile is not set to '%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log'."
