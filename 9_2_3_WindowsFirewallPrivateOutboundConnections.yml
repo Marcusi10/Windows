@@ -1,9 +1,10 @@
-- name: Cambiar políticas de contraseñas en Windows Server 
+---
+- name: Cambiar políticas de contraseñas en Windows Server
   hosts: all
   gather_facts: no
   tasks:
     - name: Set Windows Firewall Private Profile Outbound connections to Allow
-      win_firewall_rule:
+      win_firewall_profile:
         profile: private
-        name: "Allow Outbound Connections"
-        enabled: yes
+        default_outbound_action: allow
+        state: present
