@@ -1,24 +1,7 @@
 ---
-- name: Ensure Windows Firewall Private Profile Logging Path
-  hosts: all
-  gather_facts: no
-  tasks:
-    - name: Get current Firewall Profile settings for Private
-      win_shell: Get-NetFirewallProfile -Profile Private
-      register: current_firewall_profile
-
-    - name: Ensure the logging path is set to '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
-      win_shell: Set-NetFirewallProfile -Profile Private -LogFileName "%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log"
-      when: "'%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' not in current_firewall_profile.stdout"
-      changed_when: True
-    
-    - name: Confirm Windows Firewall Logging Path for Private Profile
-      win_shell: Get-NetFirewallProfile -Profile Private
-      register: updated_firewall_profile
-
-    - name: Ensure Logging Path is set correctly for Private Profile
-      assert:
-        that:
-          - "'%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log' in updated_firewall_profile.stdout"
-        fail_msg: "The Logging Path for the Private Profile is not set to the expected value."
-
+- name: Ensure 'Windows Firewall - Private - Logging - Name' is set to '%SYSTEMROOT%\\System32\\logfiles\\firewall\\privatefw.log'"
+     win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windowsfirewall\Privateprofile\Logging
+        name: "LogFilePath"
+        data: "%SYSTEMROOT%\\System32\\logfiles\\firewall\\privatefw.log"
+        type: string
