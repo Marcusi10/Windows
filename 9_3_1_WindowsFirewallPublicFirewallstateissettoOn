@@ -1,0 +1,19 @@
+---
+- name: Asegurar que el firewall del perfil público esté activado
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Verificar el estado del firewall del perfil público
+      win_shell: |
+        $status = Get-NetFirewallProfile -Profile Public
+        $status.Enabled
+      register: firewall_status
+
+    - name: Activar el firewall para el perfil público
+      win_shell: Set-NetFirewallProfile -Profile Public -Enabled True
+      when: firewall_status.stdout != 'True'
+
+    - name: Confirmar que el firewall del perfil público está activado
+      debug:
+        msg: "El firewall del perfil público está activado."
+      when: firewall_status.stdout == 'True'
