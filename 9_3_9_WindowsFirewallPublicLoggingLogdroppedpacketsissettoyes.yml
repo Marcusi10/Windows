@@ -16,3 +16,4 @@
       debug:
         msg: "El registro de paquetes descartados para el perfil público está activado."
       when: result.changed
+
