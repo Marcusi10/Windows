@@ -1,0 +1,18 @@
+---
+- name: Configurar el registro de paquetes descartados para el firewall (Perfil Público)
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Establecer el valor para 'Log dropped packets' en el perfil público
+      win_regedit:
+        path: 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging'
+        name: 'LogDroppedPackets'
+        data: '1'  # 1 significa que se registran los paquetes descartados
+        datatype: 'dword'
+      register: result
+
+    - name: Confirmar que se está registrando los paquetes descartados
+      debug:
+        msg: "El registro de paquetes descartados para el perfil público está activado."
+      when: result.changed
