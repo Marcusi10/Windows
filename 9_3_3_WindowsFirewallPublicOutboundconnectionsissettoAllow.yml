@@ -1,0 +1,20 @@
+---
+- name: Configuración de conexiones salientes para el firewall (Perfil Público)
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual de las conexiones salientes en el perfil público
+      win_shell: |
+        $outbound_action = Get-NetFirewallProfile -Profile Public
+        $outbound_action.DefaultOutboundAction
+      register: outbound_action_status
+
+    - name: Establecer las conexiones salientes en el perfil público a 'Allow'
+      win_shell: Set-NetFirewallProfile -Profile Public -DefaultOutboundAction Allow
+      when: outbound_action_status.stdout != 'Allow'
+
+    - name: Confirmar que las conexiones salientes están configuradas para 'Allow'
+      debug:
+        msg: "Las conexiones salientes en el perfil público están configuradas para 'Allow'."
+      when: outbound_action_status.stdout == 'Allow'
