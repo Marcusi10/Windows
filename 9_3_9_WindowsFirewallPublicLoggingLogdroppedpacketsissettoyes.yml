@@ -4,16 +4,21 @@
   gather_facts: no
 
   tasks:
-    - name: Establecer 'Log dropped packets' en el perfil público
+    - name: Verificar la configuración actual para el registro de paquetes descartados
+      win_shell: |
+        $profile = Get-NetFirewallProfile -Profile Public
+        (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging').LogDroppedPackets
+      register: log_dropped_packets_status
+
+    - name: Configurar para registrar paquetes descartados
       win_regedit:
         path: 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging'
         name: 'LogDroppedPackets'
-        data: '1'  # 1 para activar el registro de paquetes descartados
+        data: '1'
         datatype: 'dword'
-      register: result
+      when: log_dropped_packets_status.stdout.strip() != '1'
 
     - name: Confirmar que el registro de paquetes descartados está habilitado
       debug:
         msg: "El registro de paquetes descartados para el perfil público está activado."
-      when: result.changed
-
+      when: log_dropped_packets_status.stdout.strip() == '1'
