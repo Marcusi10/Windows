@@ -1,0 +1,18 @@
+---
+- name: Configuración de Firewall de Windows
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: Establecer nombre del archivo de registro para Firewall (Perfil Privado)
+      win_regedit:
+        path: 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging\LogFilePath'
+        name: '(Default)'
+        data: '%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log'
+        datatype: 'string'
+      register: result
+
+    - name: Verificar si la configuración se realizó correctamente
+      debug:
+        msg: "Se ha configurado el nombre del archivo de registro del firewall para el perfil privado."
+      when: result.changed
