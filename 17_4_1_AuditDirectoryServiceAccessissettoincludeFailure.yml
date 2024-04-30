@@ -1,0 +1,20 @@
+---
+- name: Configurar la auditoría para 'Audit Directory Service Access' para 'Failure'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Directory Service Access'
+      win_shell: |
+        $currentStatus = auditpol /get /subcategory:"Directory Service Access" | Select-String -Pattern "Failure"
+        if (!$currentStatus) {
+          auditpol /set /subcategory:"Directory Service Access" /failure:enable
+          Write-Output "Configuración de auditoría ajustada a 'Failure'"
+        } else {
+          Write-Output "La auditoría ya está configurada para 'Failure'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
