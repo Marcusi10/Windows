@@ -1,0 +1,13 @@
+---
+- name: Configurar la auditoría de gestión de grupos de distribución para 'Success'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Distribution Group Management'
+      win_shell: |
+        $currentStatus = auditpol /get /subcategory:"Distribution Group Management" | Select-String -Pattern "Success"
+        if (!$currentStatus) {
+          auditpol /set /subcategory:"Distribution Group Management" /success:enable
+          Write-Output "Configuración de auditoría ajustada a 'Success'"
+        }
