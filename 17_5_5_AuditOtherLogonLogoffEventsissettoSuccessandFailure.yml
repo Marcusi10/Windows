@@ -1,0 +1,20 @@
+---
+- name: Configurar la auditoría para 'Audit Other Logon/Logoff Events' para 'Success and Failure'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Other Logon/Logoff Events'
+      win_shell: |
+        $currentStatus = auditpol /get /subcategory:"Other Logon/Logoff Events" | Select-String -Pattern "Success and Failure"
+        if (!$currentStatus) {
+          auditpol /set /subcategory:"Other Logon/Logoff Events" /success:enable /failure:enable
+          Write-Output "Configuración de auditoría ajustada a 'Success and Failure'"
+        } else {
+          Write-Output "La auditoría ya está configurada para 'Success and Failure'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
