@@ -1,0 +1,21 @@
+---
+- name: Configurar auditoría para 'Audit Audit Policy Change' para 'Success'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Audit Policy Change'
+      win_shell: |
+        $currentSuccess = auditpol /get /subcategory:"Audit Policy Change" | Select-String -Pattern "Success"
+        
+        if (!$currentSuccess) {
+          auditpol /set /subcategory:"Audit Policy Change" /success:enable
+          Write-Output "Configuración de auditoría ajustada para 'Success'"
+        } else {
+          Write-Output "'Success' ya está configurado para 'Audit Policy Change'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
