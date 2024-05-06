@@ -1,0 +1,21 @@
+---
+- name: Configurar auditoría para 'Audit Other Policy Change Events' para 'Failure'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Other Policy Change Events'
+      win_shell: |
+        $currentFailure = auditpol /get /subcategory:"Other Policy Change Events" | Select-String -Pattern "Failure"
+        
+        if (!$currentFailure) {
+          auditpol /set /subcategory:"Other Policy Change Events" /failure:enable
+          Write-Output "Configuración de auditoría ajustada para 'Failure'"
+        } else {
+          Write-Output "'Failure' ya está configurado para 'Audit Other Policy Change Events'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
