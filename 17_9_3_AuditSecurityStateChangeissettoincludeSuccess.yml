@@ -1,0 +1,21 @@
+---
+- name: Configurar auditoría para 'Audit Security State Change' para 'Success'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Security State Change'
+      win_shell: |
+        $currentSuccess = auditpol /get /subcategory:"Security State Change" | Select-String -Pattern "Success"
+        
+        if (!$currentSuccess) {
+          auditpol /set /subcategory:"Security State Change" /success:enable
+          Write-Output "Configuración de auditoría ajustada para 'Success'"
+        } else {
+          Write-Output "'Success' ya está configurado para 'Audit Security State Change'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
