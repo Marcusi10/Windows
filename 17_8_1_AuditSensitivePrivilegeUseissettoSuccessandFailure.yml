@@ -1,0 +1,29 @@
+---
+- name: Configurar auditoría para 'Audit Sensitive Privilege Use' para 'Success and Failure'
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Verificar la configuración actual para 'Audit Sensitive Privilege Use'
+      win_shell: |
+        $currentSuccess = auditpol /get /subcategory:"Sensitive Privilege Use" | Select-String -Pattern "Success"
+        $currentFailure = auditpol /get /subcategory:"Sensitive Privilege Use" | Select-String -Pattern "Failure"
+        
+        if (!$currentSuccess) {
+          auditpol /set /subcategory:"Sensitive Privilege Use" /success:enable
+          Write-Output "Configuración de auditoría ajustada para 'Success'"
+        } else {
+          Write-Output "'Success' ya está configurado para 'Audit Sensitive Privilege Use'"
+        }
+        
+        if (!$currentFailure) {
+          auditpol /set /subcategory:"Sensitive Privilege Use" /failure:enable
+          Write-Output "Configuración de auditoría ajustada para 'Failure'"
+        } else {
+          Write-Output "'Failure' ya está configurado para 'Audit Sensitive Privilege Use'"
+        }
+      register: audit_result
+
+    - name: Confirmar que la configuración se realizó correctamente
+      debug:
+        msg: "{{ audit_result.stdout }}"
