@@ -1,4 +1,3 @@
-auditpol /set /subcategory:"Cambios de servicio de directorio" /success:enable
 ---
 - name: Asegurar que la auditoría de Cambios de servicio de directorio registre Success
   hosts: all
