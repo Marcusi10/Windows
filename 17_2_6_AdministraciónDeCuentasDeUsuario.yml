@@ -1,0 +1,1 @@
+auditpol /set /subcategory:"Administración de cuentas de usuario" /success:enable
