@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Almacenamiento extraíble registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Almacenamiento extraíble
+      win_shell: auditpol /set /subcategory:"Almacenamiento extraíble" /success:enable 
