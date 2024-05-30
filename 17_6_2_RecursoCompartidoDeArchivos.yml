@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Cerrar sesión registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Cerrar sesión
+      win_shell: auditpol /set /subcategory:"Recurso compartido de archivos" /success:enable 
