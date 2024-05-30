@@ -1,1 +1,7 @@
-auditpol /set /subcategory:"Administración de cuentas de usuario" /success:enable
+---
+- name: Asegurar que la auditoría de Administración de cuentas de usuario registre 'Success and Failure'
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría Administración de cuentas de usuario
+      win_shell: auditpol /set /subcategory:"Administración de cuentas de usuario" /success:enable /failure:enable
