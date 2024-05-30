@@ -1,19 +1,8 @@
 ---
-- name: Asegurar que la auditoría de validación de credenciales registre 'Success and Failure'
+- name: Asegurar que la auditoría de Servicio de autenticación Kerbeross registre 'Success and Failure'
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría para validar credenciales
-      win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Servicio de autenticación Kerberos" | Select-String -Pattern "Success and Failure"
-        if (!$currentStatus) {
-          auditpol /set /subcategory:"Credential Validation" /success:enable /failure:enable
-          Write-Output "Política de auditoría configurada para 'Success and Failure'"
-        } else {
-          Write-Output "La política de auditoría ya está configurada para 'Success and Failure'"
-        }
-      register: audit_result
-
-    - name: Verificar que la política se configuró correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Servicio de autenticación Kerberos
+      win_shell: auditpol /set /subcategory:"Servicio de autenticación Kerberos" /success:enable /failure:enable
+        
