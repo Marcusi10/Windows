@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Cambio de la directiva del nivel de reglas de MPSSVC registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Cambio de la directiva del nivel de reglas de MPSSVC
+      win_shell: auditpol /set /subcategory:"Cambio de la directiva del nivel de reglas de MPSSVC" /success:enable /failure:enable
