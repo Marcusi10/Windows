@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Group Membership registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Audit Group Membership
+      win_shell: auditpol /set /subcategory:"Pertenencia a grupos" /success:enable
