@@ -1,6 +1,6 @@
 ---
 - name: Configurar auditoría de autenticación Kerberos
-  hosts: windows_servers
+  hosts: all
   gather_facts: no
   tasks:
     - name: Habilitar auditoría de autenticación Kerberos
