@@ -1,0 +1,1 @@
+auditpol /set /subcategory:"Otros eventos de administración de cuentas" /success:enable
