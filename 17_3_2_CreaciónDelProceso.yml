@@ -1,1 +1,7 @@
-auditpol /set /subcategory:"Creación del proceso" /success:enable
+---
+- name: Asegurar que la auditoría de Creación del proceso registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría ACreación del proceso
+      win_shell: auditpol /set /subcategory:"Creación del proceso" /success:enable
