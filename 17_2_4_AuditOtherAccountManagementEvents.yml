@@ -1,1 +1,7 @@
-auditpol /set /subcategory:"Otros eventos de administración de cuentas" /success:enable
+---
+- name: Asegurar que la auditoría de Otros eventos de administración de cuentas registre 'Success'
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría Otros eventos de administración de cuentas
+      win_shell: auditpol /set /subcategory:"Otros eventos de administración de cuentas" /success:enable
