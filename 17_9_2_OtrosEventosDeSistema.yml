@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Otros eventos de sistema registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Otros eventos de sistema
+      win_shell: auditpol /set /subcategory:"Otros eventos de sistema" /success:enable /failure:enable
