@@ -1,0 +1,7 @@
+---
+- name: Asegurar que la auditoría de Audit Extensión del sistema de seguridad registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Extensión del sistema de seguridad
+      win_shell: auditpol /set /subcategory:"Extensión del sistema de seguridad" /success:enable
