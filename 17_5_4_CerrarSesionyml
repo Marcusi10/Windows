@@ -1,1 +1,0 @@
-auditpol /set /subcategory:"Cerrar sesións" /success:enable
