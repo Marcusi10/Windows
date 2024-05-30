@@ -1,1 +1,7 @@
-auditpol /set /subcategory:"Inicio de sesión especial" /success:enable
+---
+- name: Asegurar que la auditoría de Audit Inicio de sesión especial registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Inicio de sesión especial
+      win_shell: auditpol /set /subcategory:"Inicio de sesión especial" /success:enable
