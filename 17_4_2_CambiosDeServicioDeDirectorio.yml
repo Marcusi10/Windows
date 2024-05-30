@@ -1,1 +1,8 @@
 auditpol /set /subcategory:"Cambios de servicio de directorio" /success:enable
+---
+- name: Asegurar que la auditoría de Cambios de servicio de directorio registre Success
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de auditoría a Cambios de servicio de directorio
+      win_shell: auditpol /set /subcategory:"Cambios de servicio de directorio" /success:enable
