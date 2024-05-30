@@ -5,7 +5,7 @@
   tasks:
     - name: Configurar la política de auditoría para validar credenciales
       win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Kerberos Authentication Service" | Select-String -Pattern "Success and Failure"
+        $currentStatus = auditpol /get /subcategory:"Servicio de autenticación Kerberos" | Select-String -Pattern "Success and Failure"
         if (!$currentStatus) {
           auditpol /set /subcategory:"Credential Validation" /success:enable /failure:enable
           Write-Output "Política de auditoría configurada para 'Success and Failure'"
