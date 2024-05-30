@@ -1,0 +1,1 @@
+auditpol /set /subcategory:"Cambios de servicio de directorio" /success:enable
