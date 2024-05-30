@@ -1,0 +1,15 @@
+---
+- name: Configurar auditoría de autenticación Kerberos
+  hosts: windows_servers
+  gather_facts: no
+  tasks:
+    - name: Habilitar auditoría de autenticación Kerberos
+      win_audit_policy:
+        subcategory: "Account Logon"
+        policy_setting: "Audit Kerberos Authentication Service"
+        state: "success"
+      register: audit_result
+
+    - name: Verificar si se aplicó la configuración
+      debug:
+        var: audit_result.changed
