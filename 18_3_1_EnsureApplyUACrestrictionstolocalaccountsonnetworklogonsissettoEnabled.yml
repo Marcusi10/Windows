@@ -1,8 +1,10 @@
-- hosts: all
+- name: Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled'
+  hosts: all
+  gather_facts: no
   tasks:
     - name: Set 'Apply UAC restrictions to local accounts on network logons' policy
       win_security_policy:
-        section: Local Policies\Security Options
+        section: Security Options
         key: LocalAccountTokenFilterPolicy
         value: '1'
       register: uac_policy
