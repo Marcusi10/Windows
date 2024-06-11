@@ -1,0 +1,10 @@
+- name: Asegurar que 'Allow Online Tips' esté configurado como 'Disabled'
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar 'Allow Online Tips' como 'Disabled'
+      win_regmerge:
+        path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        data:
+          AllowOnlineTips: 0
+        state: present
