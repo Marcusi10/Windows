@@ -1,0 +1,12 @@
+- hosts: all
+  tasks:
+    - name: Set 'Apply UAC restrictions to local accounts on network logons' policy
+      win_security_policy:
+        section: Local Policies\Security Options
+        key: LocalAccountTokenFilterPolicy
+        value: '1'
+      register: uac_policy
+
+    - name: Print result
+      debug:
+        msg: "UAC restrictions for local accounts on network logons set to Enabled: {{ uac_policy.changed }}"
