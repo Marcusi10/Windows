@@ -14,7 +14,7 @@
       win_feature:
         name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
         state: present
-      when: laps_feature_status is not defined or laps_feature_status.results[0].state == 'absent'
+      when: laps_feature_status.feature_result | length == 0 or laps_feature_status.feature_result[0].state == 'absent'
 
     - name: Verificar que LAPS AdmPwd GPO Extension / CSE se instaló correctamente
       win_feature:
