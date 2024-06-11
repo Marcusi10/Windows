@@ -1,0 +1,18 @@
+- name: Asegurar que la auditoría de Audit Extensión del sistema de seguridad registre Success y configurar política de seguridad
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Configurar la política de seguridad para 'Prevent enabling lock screen camera'
+      win_regmerge:
+        path: HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization
+        data:
+          PreventLockScreenCamera: 1
+        state: present
+      register: camera_lock_result
+
+    - name: Verificar el resultado de la configuración de la política de seguridad
+      debug:
+        msg: "{{ camera_lock_result }}"
+
+    - name: Configurar la auditoría para 'Audit Extensión del sistema de seguridad' para registrar Success
+      win_shell: auditpol /set /subcategory:"Extensión del sistema de seguridad" /success:enable
