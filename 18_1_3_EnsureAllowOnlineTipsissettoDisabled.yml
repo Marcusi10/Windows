@@ -8,10 +8,10 @@
       changed_when: false
 
     - name: Configurar 'Allow Online Tips' como 'Disabled'
-      win_regmerge:
-        path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
-        data:
-          AllowOnlineTips: 0
+      win_regedit:
+        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        name: AllowOnlineTips
+        data: 0
         state: present
       when: allow_online_tips_status.stdout != "0"
 
@@ -22,5 +22,3 @@
     - name: Mostrar el resultado de la configuración
       debug:
         msg: "'Allow Online Tips' se configuró como {{ allow_online_tips_verification.stdout }}"
-
-
