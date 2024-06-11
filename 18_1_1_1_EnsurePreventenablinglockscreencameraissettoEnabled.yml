@@ -3,16 +3,11 @@
   gather_facts: no
   tasks:
     - name: Configure 'Prevent enabling lock screen camera' policy
-      win_command: |
-        $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-        $regName = "PreventLockScreenCamera"
-        $regValue = 1
-        
-        if (!(Test-Path $regPath)) {
-            New-Item -Path $regPath -Force | Out-Null
-        }
-        
-        Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
+      win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization
+        name: PreventLockScreenCamera
+        data: 1
+        state: present
       register: camera_lock_result
 
     - name: Verify the result of the security policy configuration
