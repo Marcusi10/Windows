@@ -2,21 +2,31 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Verificar el estado actual de 'Allow Online Tips'
-      win_shell: Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Select-Object -ExpandProperty AllowOnlineTips
+    - name: Verificar si el registro 'Allow Online Tips' existe
+      win_shell: |
+        $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        if (Test-Path -Path $regPath) {
+            $regValue = (Get-ItemProperty -Path $regPath -Name "AllowOnlineTips" -ErrorAction SilentlyContinue).AllowOnlineTips
+            $regValue
+        } else {
+            Write-Output "0"
+        }
       register: allow_online_tips_status
       changed_when: false
 
     - name: Configurar 'Allow Online Tips' como 'Disabled'
-      win_regedit:
-        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
-        name: AllowOnlineTips
-        data: 0
-        state: present
+      win_shell: |
+        $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        if (!(Test-Path -Path $regPath)) {
+            New-Item -Path $regPath -Force | Out-Null
+        }
+        Set-ItemProperty -Path $regPath -Name "AllowOnlineTips" -Value 0
       when: allow_online_tips_status.stdout != "0"
 
     - name: Verificar que 'Allow Online Tips' se configuró correctamente
-      win_shell: Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Select-Object -ExpandProperty AllowOnlineTips
+      win_shell: |
+        $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        (Get-ItemProperty -Path $regPath -Name "AllowOnlineTips" -ErrorAction SilentlyContinue).AllowOnlineTips
       register: allow_online_tips_verification
 
     - name: Mostrar el resultado de la configuración
