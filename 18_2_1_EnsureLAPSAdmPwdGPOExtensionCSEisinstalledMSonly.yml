@@ -4,21 +4,24 @@
   tasks:
     - name: Verificar si LAPS AdmPwd GPO Extension / CSE está instalado
       win_feature:
-        name: RSAT-AD-PowerShell # Assuming the name of LAPS feature is RSAT-AD-PowerShell
+        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
       register: laps_feature_status
+
+    - debug:
+        var: laps_feature_status
 
     - name: Instalar LAPS AdmPwd GPO Extension / CSE si no está instalado
       win_feature:
-        name: RSAT-AD-PowerShell # Assuming the name of LAPS feature is RSAT-AD-PowerShell
+        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
         state: present
-      when: not laps_feature_status.feature_installed
+      when: laps_feature_status is not defined or laps_feature_status.results[0].state == 'absent'
 
     - name: Verificar que LAPS AdmPwd GPO Extension / CSE se instaló correctamente
       win_feature:
-        name: RSAT-AD-PowerShell # Assuming the name of LAPS feature is RSAT-AD-PowerShell
+        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
       register: laps_feature_verification
 
     - name: Mostrar el resultado de la instalación
       debug:
-        msg: "La extensión / CSE de LAPS se instaló: {{ laps_feature_verification.feature_installed }}"
+        msg: "La extensión / CSE de LAPS se instaló: {{ laps_feature_verification.results[0].state }}"
 
