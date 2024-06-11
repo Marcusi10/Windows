@@ -3,25 +3,32 @@
   gather_facts: no
   tasks:
     - name: Verificar si LAPS AdmPwd GPO Extension / CSE está instalado
-      win_feature:
-        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
+      win_shell: |
+        $featureName = "RSAT-AD-PowerShell"
+        $feature = Get-WindowsFeature -Name $featureName
+        $feature.Installed
       register: laps_feature_status
+      changed_when: false
 
     - debug:
         var: laps_feature_status
 
     - name: Instalar LAPS AdmPwd GPO Extension / CSE si no está instalado
-      win_feature:
-        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
-        state: present
-      when: laps_feature_status.feature_result | length == 0 or laps_feature_status.feature_result[0].state == 'absent'
+      win_shell: |
+        $featureName = "RSAT-AD-PowerShell"
+        $feature = Get-WindowsFeature -Name $featureName
+        if (!$feature.Installed) {
+          Install-WindowsFeature -Name $featureName -IncludeAllSubFeature -IncludeManagementTools
+        }
+      when: not laps_feature_status.stdout | bool
 
     - name: Verificar que LAPS AdmPwd GPO Extension / CSE se instaló correctamente
-      win_feature:
-        name: RSAT-AD-PowerShell  # Assuming the name of LAPS feature is RSAT-AD-PowerShell
+      win_shell: |
+        $featureName = "RSAT-AD-PowerShell"
+        $feature = Get-WindowsFeature -Name $featureName
+        $feature.Installed
       register: laps_feature_verification
 
     - name: Mostrar el resultado de la instalación
       debug:
-        msg: "La extensión / CSE de LAPS se instaló: {{ laps_feature_verification.results[0].state }}"
-
+        msg: "La extensión / CSE de LAPS se instaló: {{ laps_feature_verification.stdout }}"
