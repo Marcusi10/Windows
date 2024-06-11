@@ -1,29 +1,27 @@
 - name: Ensure 'Apply UAC restrictions to local accounts on network logons' is set to 'Enabled'
   hosts: all
   gather_facts: no
-  
+
   tasks:
     - name: Check current 'Apply UAC restrictions to local accounts on network logons' policy
-      win_shell: |
-        $securityPolicy = [Microsoft.Security.Policy.SecurityPolicy]::new()
-        $securityPolicy.Load()
-        $securityPolicy.SecurityOptions.LocalAccountTokenFilterPolicy
+      win_regedit:
+        path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: LocalAccountTokenFilterPolicy
       register: current_uac_policy
 
     - name: Set 'Apply UAC restrictions to local accounts on network logons' policy to Enabled
-      win_shell: |
-        $securityPolicy = [Microsoft.Security.Policy.SecurityPolicy]::new()
-        $securityPolicy.Load()
-        $securityPolicy.SecurityOptions.LocalAccountTokenFilterPolicy = 1
-        $securityPolicy.Save()
-      when: current_uac_policy.stdout != '1'
+      win_regedit:
+        path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: LocalAccountTokenFilterPolicy
+        data: 1
+        type: dword
+      when: current_uac_policy.data != '1'
       register: set_uac_policy
 
     - name: Verify 'Apply UAC restrictions to local accounts on network logons' policy is set to Enabled
-      win_shell: |
-        $securityPolicy = [Microsoft.Security.Policy.SecurityPolicy]::new()
-        $securityPolicy.Load()
-        $securityPolicy.SecurityOptions.LocalAccountTokenFilterPolicy
+      win_regedit:
+        path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: LocalAccountTokenFilterPolicy
       register: verified_uac_policy
 
     - name: Display the result
