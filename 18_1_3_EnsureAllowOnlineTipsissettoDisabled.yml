@@ -1,10 +1,26 @@
-- name: Asegurar que 'Allow Online Tips' esté configurado como 'Disabled'
+- name: Configurar 'Allow Online Tips' como 'Disabled'
   hosts: all
   gather_facts: no
   tasks:
+    - name: Verificar el estado actual de 'Allow Online Tips'
+      win_shell: Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Select-Object -ExpandProperty AllowOnlineTips
+      register: allow_online_tips_status
+      changed_when: false
+
     - name: Configurar 'Allow Online Tips' como 'Disabled'
       win_regmerge:
         path: HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
         data:
           AllowOnlineTips: 0
         state: present
+      when: allow_online_tips_status.stdout != "0"
+
+    - name: Verificar que 'Allow Online Tips' se configuró correctamente
+      win_shell: Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Select-Object -ExpandProperty AllowOnlineTips
+      register: allow_online_tips_verification
+
+    - name: Mostrar el resultado de la configuración
+      debug:
+        msg: "'Allow Online Tips' se configuró como {{ allow_online_tips_verification.stdout }}"
+
+
