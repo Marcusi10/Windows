@@ -1,0 +1,6 @@
+---
+- name: Configurar directiva "Prohibir el acceso al Panel de Control"
+  win_group_policy:
+    name: "Prohibir el acceso al Panel de Control"
+    policy: "User Configuration\Administrative Templates\Control Panel\Prohibit access to Control Panel and PC settings"
+    setting: "Enabled"
