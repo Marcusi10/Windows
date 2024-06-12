@@ -1,6 +1,16 @@
 ---
 - name: Configurar directiva "Prohibir el acceso al Panel de Control"
-  win_group_policy:
-    name: "Prohibir el acceso al Panel de Control"
-    policy: "User Configuration\Administrative Templates\Control Panel\Prohibit access to Control Panel and PC settings"
-    setting: "Enabled"
+  hosts: windows_servers
+  tasks:
+    - name: Configurar directiva "Prohibir el acceso al Panel de Control"
+      win_gpo:
+        name: "Prohibit access to Control Panel and PC settings"
+        path: "User Configuration\Administrative Templates\Control Panel"
+        setting: enabled
+      register: gpo_result
+
+    - name: Verificar el resultado de la configuración
+      debug:
+        msg: "La directiva de 'Prohibir el acceso al Panel de Control' se ha configurado correctamente."
+      when: gpo_result.changed
+
