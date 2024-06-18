@@ -2,12 +2,16 @@
 - name: Ensure 'Windows Firewall: Domain: Outbound connections' is set to 'Allow (default)'
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Get the current Windows Firewall domain profile settings
-      win_shell: Get-NetFirewallProfile -Profile Domain
-      register: domain_firewall_profile
+    - name: Check current outbound connections setting for Domain profile
+      win_shell: Get-NetFirewallProfile -Profile Domain | Select-Object -ExpandProperty DefaultOutboundAction
+      register: firewall_domain_outbound
 
-    - name: Set 'Windows Firewall: Domain: Outbound connections' to 'Allow (default)'
-      win_shell: |
-        Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
+    - name: Set outbound connections to 'Allow' if not already set
+      win_shell: Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
+      when: firewall_domain_outbound.stdout -ne 'Allow'
+
+    - name: Notify on listening settings
+      win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen True
+      when: firewall_domain_outbound.changed
+
