@@ -3,10 +3,6 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Check current outbound connections setting for Domain profile
-      win_shell: Get-NetFirewallProfile -Profile Domain | Select-Object -ExpandProperty DefaultOutboundAction
-      register: firewall_domain_outbound
-
     - name: Set outbound connections to 'Allow' if not already set
       win_shell: Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
       when: firewall_domain_outbound.stdout -ne 'Allow'
