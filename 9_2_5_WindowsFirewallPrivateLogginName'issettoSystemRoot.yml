@@ -1,18 +1,15 @@
----
-- name: Configuración de Firewall de Windows
-  hosts: all
-  gather_facts: yes
-
+- hosts: all
   tasks:
-    - name: Establecer nombre del archivo de registro para Firewall (Perfil Privado)
-      win_regedit:
-        path: 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging\LogFilePath'
-        name: '(Default)'
-        data: '%SystemRoot%\\System32\\logfiles\\firewall\\privatefw.log'
-        datatype: 'string'
-      register: result
-
-    - name: Verificar si la configuración se realizó correctamente
-      debug:
-        msg: "Se ha configurado el nombre del archivo de registro del firewall para el perfil privado."
-      when: result.changed
+    - name: Ensure 'Windows Firewall: Private: Logging: Name' is set to '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
+      win_shell: |
+        $firewallProfile = Get-NetFirewallProfile -Name Private
+        if ($firewallProfile.LogFilePath -ne '%SystemRoot%\System32\logfiles\firewall\privatefw.log') {
+            Set-NetFirewallProfile -Name Private -LogFilePath '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
+        }
+      register: firewall_logging
+      changed_when: firewall_logging.stdout.contains("LogFilePath")
+      failed_when: not firewall_logging.stdout.contains("LogFilePath")
+      tags:
+        - firewall
+        - logging
+        - security
