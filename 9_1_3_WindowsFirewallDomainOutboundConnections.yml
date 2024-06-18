@@ -1,15 +1,16 @@
-- hosts: all
+---
+- name: Ensure 'Windows Firewall: Domain: Outbound connections' is set to 'Allow (default)'
+  hosts: all
+  gather_facts: no
   tasks:
-    - name: Ensure 'Windows Firewall: Domain: Firewall state' is set to 'On (recommended)'
-      win_shell: |
-        $firewallProfile = Get-NetFirewallProfile -Name Domain
-        if ($firewallProfile.Enabled -ne $true) {
-            Set-NetFirewallProfile -Name Domain -Enabled True
-        }
-      register: firewall_state
-      changed_when: firewall_state.stdout.contains("Enabled")
-      failed_when: not firewall_state.stdout.contains("Enabled")
-      tags:
-        - firewall
-        - security
+    - name: Get the current Windows Firewall domain profile settings
+      win_shell: Get-NetFirewallProfile -Profile Domain
+      register: domain_firewall_profile
 
+    - name: Ensure 'Windows Firewall: Domain: Outbound connections' is set to 'Allow (default)'
+      win_firewall_rule:
+        name: 'Windows Firewall: Domain: Outbound connections'
+        direction: out
+        action: allow
+        state: present
+      when: domain_firewall_profile.stdout.find('DefaultOutboundAction   : Block') != -1
