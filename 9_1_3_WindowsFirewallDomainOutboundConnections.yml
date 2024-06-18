@@ -11,4 +11,3 @@
     - name: Set 'Windows Firewall: Domain: Outbound connections' to 'Allow (default)'
       win_shell: |
         Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
-      when: domain_firewall_profile.stdout.find('DefaultOutboundAction   : Block') != -1
