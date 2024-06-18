@@ -14,4 +14,3 @@
     - name: Notify on listening settings
       win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen True
       when: firewall_domain_outbound.changed
-
