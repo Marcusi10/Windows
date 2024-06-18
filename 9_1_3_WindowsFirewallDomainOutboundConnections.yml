@@ -1,9 +1,15 @@
-- name: Cambiar políticas de contraseñas en Windows Server 
-  hosts: all
-  gather_facts: no
+- hosts: all
   tasks:
-    - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
-      win_shell: Get-NetFirewallProfile -Profile Domain
+    - name: Ensure 'Windows Firewall: Domain: Firewall state' is set to 'On (recommended)'
+      win_shell: |
+        $firewallProfile = Get-NetFirewallProfile -Name Domain
+        if ($firewallProfile.Enabled -ne $true) {
+            Set-NetFirewallProfile -Name Domain -Enabled True
+        }
+      register: firewall_state
+      changed_when: firewall_state.stdout.contains("Enabled")
+      failed_when: not firewall_state.stdout.contains("Enabled")
+      tags:
+        - firewall
+        - security
 
-    - name: Modificar política de conexiones salientes en el perfil de Dominio
-      win_shell: Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
