@@ -1,12 +1,22 @@
 ---
-- name: Ensure 'Windows Firewall: Domain: Outbound connections' is set to 'Allow (default)'
+- name: Change Windows Firewall Domain profile outbound connections to Allow
   hosts: all
   gather_facts: no
   tasks:
-    - name: Set outbound connections to 'Allow' if not already set
-      win_shell: Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
-      when: firewall_domain_outbound.stdout -ne 'Allow'
+    - name: Set Windows Firewall Domain profile outbound connections to Allow
+      ansible.windows.win_shell: |
+        # Define the PowerShell script to set the outbound connection action to Allow
+        Set-NetFirewallProfile -Profile Domain -DefaultOutboundAction Allow
+
+      register: firewall_domain_outbound_result
+
+    - name: Check if firewall setting was changed
+      debug:
+        msg: "Firewall outbound connections setting was {{ 'changed' if firewall_domain_outbound_result.changed else 'unchanged' }}"
 
     - name: Notify on listening settings
-      win_shell: Set-NetFirewallProfile -Profile Domain -NotifyOnListen True
-      when: firewall_domain_outbound.changed
+      ansible.windows.win_shell: |
+        # Enable notifications on listening for the Domain profile
+        Set-NetFirewallProfile -Profile Domain -NotifyOnListen $true
+
+      when: firewall_domain_outbound_result.changed
