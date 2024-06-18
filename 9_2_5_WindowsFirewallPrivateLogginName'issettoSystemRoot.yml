@@ -1,4 +1,7 @@
 - hosts: all
+  vars:
+    ansible_user: usr-ans
+    ansible_password: Hola123.
   tasks:
     - name: Ensure 'Windows Firewall: Private: Logging: Name' is set to '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
       win_shell: |
