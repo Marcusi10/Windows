@@ -1,0 +1,8 @@
+- hosts: domain_controllers
+  tasks:
+    - name: Ensure 'Print Spooler (Spooler)' is set to 'Disabled'
+      win_service:
+        name: Spooler
+        state: stopped
+        start_mode: disabled
+      when: ansible_os_family == 'Windows'
