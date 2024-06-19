@@ -1,13 +1,10 @@
-- hosts: windows_servers
+---
+- name: Cambiar políticas de contraseñas en Windows Server (WindowsFirewallPrivateOutbound)
+  hosts: all
+  gather_facts: no
   tasks:
-    - name: Ensure Windows Firewall Private Profile Outbound Connections is set to 'Allow (default)'
-      win_shell: |
-        $profile = Get-NetFirewallProfile -Profile Private
-        if ($profile.DefaultOutboundAction -ne "Allow") {
-            Set-NetFirewallProfile -Profile Private -DefaultOutboundAction Allow
-            Write-Output "Windows Firewall Private Profile Outbound Connections set to 'Allow (default)'"
-        } else {
-            Write-Output "Windows Firewall Private Profile Outbound Connections already set to 'Allow (default)'"
-        }
-      register: firewall_config
-      changed_when: firewall_config.rc == 0
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
+      win_shell: Get-NetFirewallProfile -Profile Private
+
+    - name: Modificar política de WindowsFirewallPrivateOutbound
+      win_shell: Set-NetFirewallProfile -Profile Private -DefaultInboundAction Allow
