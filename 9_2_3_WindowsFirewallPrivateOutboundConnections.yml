@@ -1,21 +1,13 @@
-- name: Set Windows Firewall Outbound Connections for Private Profile to Allow
-  hosts: all
-  gather_facts: no
+hosts: all
   tasks:
-    - name: Get the current Private Profile Firewall settings
-      win_shell: Get-NetFirewallProfile -Profile Private
-      register: current_firewall_settings
-
-    - name: Ensure Outbound Connections for Private Profile is set to Allow
-      win_shell: Set-NetFirewallProfile -Profile Private -DefaultOutboundAction Allow
-      when: current_firewall_settings.stdout_lines[0] contains 'DefaultOutboundAction : Block'
-
-    - name: Confirm the change has been applied
-      win_shell: Get-NetFirewallProfile -Profile Private
-      register: updated_firewall_settings
-
-    - name: Ensure the Outbound Connections for Private Profile is set to Allow
-      assert:
-        that:
-          - "'DefaultOutboundAction : Allow' in updated_firewall_settings.stdout_lines"
-        fail_msg: "Outbound connections for the private profile are not set to 'Allow'."
+    - name: Ensure Windows Firewall Private Profile Outbound Connections is set to 'Allow (default)'
+      win_shell: |
+        $profile = Get-NetFirewallProfile -Profile Private
+        if ($profile.DefaultOutboundAction -ne "Allow") {
+            Set-NetFirewallProfile -Profile Private -DefaultOutboundAction Allow
+            Write-Output "Windows Firewall Private Profile Outbound Connections set to 'Allow (default)'"
+        } else {
+            Write-Output "Windows Firewall Private Profile Outbound Connections already set to 'Allow (default)'"
+        }
+      register: firewall_config
+      changed_when: firewall_config.rc == 0
