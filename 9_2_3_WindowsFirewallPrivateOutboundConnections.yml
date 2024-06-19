@@ -1,4 +1,4 @@
-hosts: all
+- hosts: windows_servers
   tasks:
     - name: Ensure Windows Firewall Private Profile Outbound Connections is set to 'Allow (default)'
       win_shell: |
