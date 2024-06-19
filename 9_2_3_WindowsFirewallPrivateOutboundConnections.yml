@@ -7,4 +7,4 @@
       win_shell: Get-NetFirewallProfile -Profile Private
 
     - name: Modificar política de WindowsFirewallPrivateOutbound
-      win_shell: Set-NetFirewallProfile -Profile Private -DefaulOutboundAction Allow
+      win_shell: Set-NetFirewallProfile -Profile Private -DefaultOutboundAction Allow
