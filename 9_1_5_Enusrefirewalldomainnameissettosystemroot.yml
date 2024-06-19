@@ -1,0 +1,6 @@
+- name: "9.1.5,CCE-37860-4 | Ensure 'Windows Firewall - Domain - Settings - Apply local firewall rules' is set to 'Yes (default)'"
+     win_regedit:
+        path: HKLM:\Software\Policies\Microsoft\Windowsfirewall\Domainprofile
+        name: "AllowLocalPolicyMerge"
+        data: "1"
+        type: dword
