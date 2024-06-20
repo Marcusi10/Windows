@@ -7,4 +7,4 @@
       win_shell: Get-NetFirewallProfile -Profile Public
 
     - name: Modificar política de WindowsFirewallPublicSettingsApplyLocalConnectionSecurity)
-      win_shell: Set-NetFirewallProfile -Profile Public -AllowLocalFirewallRules True
+      win_shell: Set-NetFirewallProfile -Profile Public -LogFileName %SystemRoot%\System32\logfiles\firewall\publicfw.log
