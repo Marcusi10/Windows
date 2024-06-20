@@ -1,19 +1,10 @@
 ---
-- name: Asegurar que las reglas de firewall locales no se apliquen (Perfil Público)
+- name: Cambiar configuraciones del Firewall (WindowsFirewallPublicSettingsDisplayNotification)
   hosts: all
   gather_facts: no
   tasks:
-    - name: Verificar la configuración actual para 'Apply local firewall rules' en el perfil público
-      win_shell: |
-        $profile = Get-NetFirewallProfile -Profile Public
-        $profile.AllowLocalFirewallRules
-      register: allow_local_rules_status
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil Public
+      win_shell: Get-NetFirewallProfile -Profile Public
 
-    - name: Establecer 'Apply local firewall rules' para 'No'
+    - name: Modificar política de WindowsFirewallPublicSettingsDisplayNotification
       win_shell: Set-NetFirewallProfile -Profile Public -AllowLocalFirewallRules False
-      when: allow_local_rules_status.stdout != 'False'
-
-    - name: Confirmar que las reglas de firewall locales no se aplican en el perfil público
-      debug:
-        msg: "Las reglas de firewall locales no se aplican en el perfil público."
-      when: allow_local_rules_status.stdout == 'False'
