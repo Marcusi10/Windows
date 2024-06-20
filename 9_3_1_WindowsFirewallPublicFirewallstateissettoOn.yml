@@ -11,9 +11,9 @@
 
     - name: Activar el firewall para el perfil público
       win_shell: Set-NetFirewallProfile -Profile Public -Enabled True
-      when: firewall_status.stdout != 'True'
+      when: firewall_status.stdout != 'On'
 
     - name: Confirmar que el firewall del perfil público está activado
       debug:
         msg: "El firewall del perfil público está activado."
-      when: firewall_status.stdout == 'True'
+      when: firewall_status.stdout == 'On'
