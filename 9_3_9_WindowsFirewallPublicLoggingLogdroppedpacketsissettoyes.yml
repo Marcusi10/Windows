@@ -6,8 +6,5 @@
     - name: Ver la configuración actual de las conexiones entrantes en el perfil Public
       win_shell: Get-NetFirewallProfile -Profile Public
 
-    - name: Modificar política de WindowsFirewallPublicSettingsDisplayNotification
-      win_shell: Set-NetFirewallProfile -Profile Public -LogDroppedPackets Yes
-
     - name: Habilitar registro de paquetes descartados en el perfil Público
       win_shell: Set-NetFirewallProfile -Profile Public -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -LogMaxSizeKilobytes 16384 -LogAllowed Yes -LogBlocked Yes
