@@ -1,18 +1,10 @@
-- hosts: all
-  vars:
-    ansible_user: usr-ans
-    ansible_password: Hola123.
+---
+- name: Cambiar políticas de contraseñas en Windows Server (WindowsFirewallPrivateSettingsDisplayNotification)
+  hosts: all
+  gather_facts: no
   tasks:
-    - name: Ensure 'Windows Firewall: Private: Logging: Name' is set to '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
-      win_shell: |
-        $firewallProfile = Get-NetFirewallProfile -Name Private
-        if ($firewallProfile.LogFilePath -ne '%SystemRoot%\System32\logfiles\firewall\privatefw.log') {
-            Set-NetFirewallProfile -Name Private -LogFilePath '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
-        }
-      register: firewall_logging
-      changed_when: firewall_logging.stdout.contains("LogFilePath")
-      failed_when: not firewall_logging.stdout.contains("LogFilePath")
-      tags:
-        - firewall
-        - logging
-        - security
+    - name: Ver la configuración actual de las conexiones entrantes en el perfil de Dominio
+      win_shell: Get-NetFirewallProfile -Profile Private
+
+    - name: Modificar política de WindowsFirewallPrivateSettingsDisplayNotification
+      win_shell: Set-NetFirewallProfile -Profile Private -LogFileName '%SystemRoot%\System32\logfiles\firewall\privatefw.log
