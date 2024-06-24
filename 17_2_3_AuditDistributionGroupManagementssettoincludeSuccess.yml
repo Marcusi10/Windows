@@ -4,4 +4,4 @@
   gather_facts: no
   tasks:
     - name: Configurar la política de auditoría Administración de grupos de distribución
-      win_shell: auditpol /set /subcategory:”Administración de grupos de distribución” /success:enable /failure:enable
+      win_shell: auditpol /set /subcategory:”Administración de grupos de distribución” /success:enable
