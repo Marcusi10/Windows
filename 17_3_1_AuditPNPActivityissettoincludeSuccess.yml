@@ -3,5 +3,5 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría Eventos Plug and Play
+    - name: Configurar la política de auditoría de Eventos Plug and Play
       win_shell: auditpol /set /subcategory:”Eventos Plug and Play” /success:enable
