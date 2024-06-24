@@ -1,7 +1,7 @@
 --
-- name: Asegurar que la auditoría de Integridad del sistema registre ’Success and Failure’
+- name: Asegurar que la auditoría de la Integridad del sistema registre ’Success and Failure’
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría Integridad del sistema
+    - name: Configurar la política de auditoría la Integridad del sistema
       win_shell: auditpol /set /subcategory:”Integridad del sistema” /success:enable /failure:enable
