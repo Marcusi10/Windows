@@ -1,4 +1,4 @@
---
+---
 - name: Asegurar que la auditoría Integridad del sistema registre ’Success and Failure’
   hosts: all
   gather_facts: no
