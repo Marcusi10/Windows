@@ -1,7 +1,7 @@
 ---
-- name: Asegurar que la auditoría de Cambio en la directiva de autorización registre ’Success’
+- name: Asegurar que la auditoría de Cambio de la directiva de autorización registre ’Success’
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría Cambio en la directiva de autorización
-      win_shell: auditpol /set /subcategory:”Cambio en la directiva de autorización” /success:enable
+    - name: Configurar la política de auditoría Cambio de la directiva de autorización
+      win_shell: auditpol /set /subcategory:”Cambio de la directiva de autorización” /success:enable
