@@ -1,5 +1,5 @@
 ---
-- name: Asegurar que la auditoría de Administración de grupos de aplicaciones registre 'Success'
+- name: Asegurar que la auditoría de Administración de grupos de aplicaciones registre 'Success and Failure'
   hosts: all
   gather_facts: no
   tasks:
