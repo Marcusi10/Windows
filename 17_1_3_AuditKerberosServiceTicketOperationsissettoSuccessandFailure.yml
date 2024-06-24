@@ -1,5 +1,5 @@
 ---
-- name: Asegurar que la auditoría de Operaciones de vales de servicio Kerberos registre 'Success'
+- name: Asegurar que la auditoría de Operaciones de vales de servicio Kerberos registre 'Success and Failure'
   hosts: all
   gather_facts: no
   tasks:
