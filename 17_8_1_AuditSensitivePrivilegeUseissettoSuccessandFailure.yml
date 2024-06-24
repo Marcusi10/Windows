@@ -1,7 +1,7 @@
 ---
-- name: Asegurar que la auditoría de Uso de privilegio confidencial registre ’Success and Failure’
+- name: Asegurar que la auditoría de Controlador de IPsec registre ’Success and Failure’
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría Uso de privilegio confidencial
-      win_shell: auditpol /set /subcategory:”Uso de privilegio confidencial” /success:enable /failure:enable
+    - name: Configurar la política de auditoría Controlador de IPsec
+      win_shell: auditpol /set /subcategory:”Controlador de IPsec” /success:enable /failure:enable
