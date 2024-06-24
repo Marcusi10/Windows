@@ -1,6 +1,7 @@
-- name: Asegurar que la auditoría de 'Audit Distribution Group Management' registre 'Success'
+---
+- name: Asegurar que la auditoría de Administración de grupos de distribución registre 'Success'
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría de 'Audit Distribution Group Management'
-      win_shell: auditpol /set /subcategory:"Distribution Group Management" /success:enable
+    - name: Configurar la política de auditoría Administración de grupos de distribución
+      win_shell: auditpol /set /subcategory:”Administración de grupos de distribución” /success:enable /failure:enable
