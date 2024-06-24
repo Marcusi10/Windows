@@ -1,29 +1,7 @@
 ---
-- name: Configurar auditoría para 'Audit Other Object Access Events' para 'Success and Failure'
+- name: Asegurar que la auditoría de Otros eventos de acceso a objetos registre ’Success and Failure’
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit Other Object Access Events'
-      win_shell: |
-        $currentSuccess = auditpol /get /subcategory:"Other Object Access Events" | Select-String -Pattern "Success"
-        $currentFailure = auditpol /get /subcategory:"Other Object Access Events" | Select-String -Pattern "Failure"
-
-        if (!$currentSuccess) {
-          auditpol /set /subcategory:"Other Object Access Events" /success:enable
-          Write-Output "Configuración de auditoría ajustada para 'Success'"
-        } else {
-          Write-Output "'Success' ya está configurado para 'Audit Other Object Access Events'"
-        }
-
-        if (!$currentFailure) {
-          auditpol /set /subcategory:"Other Object Access Events" /failure:enable
-          Write-Output "Configuración de auditoría ajustada para 'Failure'"
-        } else {
-          Write-Output "'Failure' ya está configurado para 'Audit Other Object Access Events'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Otros eventos de acceso a objetos
+      win_shell: auditpol /set /subcategory:”Otros eventos de acceso a objetos” /success:enable /failure:enable
