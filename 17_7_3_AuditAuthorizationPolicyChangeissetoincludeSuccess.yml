@@ -1,21 +1,7 @@
 ---
-- name: Configurar auditoría para 'Audit Authorization Policy Change' para 'Success'
+- name: Asegurar que la auditoría de Cambio en la directiva de autorización registre ’Success’
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit Authorization Policy Change'
-      win_shell: |
-        $currentSuccess = auditpol /get /subcategory:"Authorization Policy Change" | Select-String -Pattern "Success"
-        
-        if (!$currentSuccess) {
-          auditpol /set /subcategory:"Authorization Policy Change" /success:enable
-          Write-Output "Configuración de auditoría ajustada para 'Success'"
-        } else {
-          Write-Output "'Success' ya está configurado para 'Audit Authorization Policy Change'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Cambio en la directiva de autorización
+      win_shell: auditpol /set /subcategory:”Cambio en la directiva de autorización” /success:enable
