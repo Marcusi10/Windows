@@ -3,5 +3,5 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría la Integridad del sistema
+    - name: Configurar la política de auditoría de la Integridad del sistema
       win_shell: auditpol /set /subcategory:”Integridad del sistema” /success:enable /failure:enable
