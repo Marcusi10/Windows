@@ -4,4 +4,5 @@
   gather_facts: no
   tasks:
     - name: Configurar la política de auditoría Operaciones de vales de servicio Kerberos
-      win_shell: auditpol /set /subcategory:"Operaciones de vales de servicio Kerberos" /success:enable
+      win_shell: auditpol /set /subcategory:"Operaciones de vales de servicio Kerberos" /success:enable /failure:enable
+    
