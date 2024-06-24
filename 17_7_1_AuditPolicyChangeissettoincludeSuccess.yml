@@ -1,7 +1,7 @@
 ---
-- name: Asegurar que la auditoría de Cambio en la directiva de auditoria registre ’Success’
+- name: Asegurar que la auditoría de Cambio en la directiva de auditoría registre ’Success’
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría Cambio en la directiva de auditoria
-      win_shell: auditpol /set /subcategory:”Cambio en la directiva de auditoria” /success:enable
+    - name: Configurar la política de auditoría Cambio en la directiva de auditoría
+      win_shell: auditpol /set /subcategory:”Cambio en la directiva de auditoría” /success:enable
