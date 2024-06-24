@@ -3,4 +3,4 @@
   gather_facts: no
   tasks:
     - name: Configurar la política de auditoría de 'Audit Application Group Management'
-      win_shell: auditpol /set /subcategory:"Audit Application Group Management" /success:enable /failure:enable
+      win_shell: auditpol /set /subcategory:'Audit Application Group Management' /success:enable /failure:enable
