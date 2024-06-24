@@ -1,29 +1,7 @@
----
-- name: Configurar auditoría para 'Audit System Integrity' para 'Success and Failure'
+--
+- name: Asegurar que la auditoría de Integridad del sistema registre ’Success and Failure’
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit System Integrity'
-      win_shell: |
-        $currentSuccess = auditpol /get /subcategory:"System Integrity" | Select-String -Pattern "Success"
-        $currentFailure = auditpol /get /subcategory:"System Integrity" | Select-String -Pattern "Failure"
-        
-        if (!$currentSuccess) {
-          auditpol /set /subcategory:"System Integrity" /success:enable
-          Write-Output "Configuración de auditoría ajustada para 'Success'"
-        } else {
-          Write-Output "'Success' ya está configurado para 'Audit System Integrity'"
-        }
-        
-        if (!$currentFailure) {
-          auditpol /set /subcategory:"System Integrity" /failure:enable
-          Write-Output "Configuración de auditoría ajustada para 'Failure'"
-        } else {
-          Write-Output "'Failure' ya está configurado para 'Audit System Integrity'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Integridad del sistema
+      win_shell: auditpol /set /subcategory:”Integridad del sistema” /success:enable /failure:enable
