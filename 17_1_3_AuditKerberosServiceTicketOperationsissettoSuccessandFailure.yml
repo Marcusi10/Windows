@@ -1,6 +1,8 @@
-- name: Asegurar que la auditoría de las operaciones de tickets de servicio Kerberos registre 'Success and Failure'
+---
+- name: Asegurar que la auditoría de operaciones de tickets de servicio Kerberos registre 'Success and Failure'
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría de las operaciones de tickets de servicio Kerberos
-      win_shell: auditpol /set /subcategory:"Auditoría de las operaciones de tickets de servicio Kerberos" /success:enable /failure:enable
+    - name: Configurar la política de auditoría de operaciones de tickets de servicio Kerberos
+      win_shell: auditpol /set /subcategory:”Kerberos Service Ticket Operations” /success:enable /failure:enable
+        
