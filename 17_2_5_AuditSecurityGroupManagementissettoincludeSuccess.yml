@@ -1,20 +1,7 @@
 ---
-- name: Configurar la auditoría para la gestión de grupos de seguridad para 'Success'
+- name: Asegurar que la auditoría de Administración de grupos de seguridad registre 'Success'
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit Security Group Management'
-      win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Security Group Management" | Select-String -Pattern "Success"
-        if (!$currentStatus) {
-          auditpol /set /subcategory:"Security Group Management" /success:enable
-          Write-Output "Configuración de auditoría ajustada a 'Success'"
-        } else {
-          Write-Output "La auditoría ya está configurada para 'Success'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Administración de grupos de seguridad
+      win_shell: auditpol /set /subcategory:”Administración de grupos de seguridad” /success:enable /failure:enable
