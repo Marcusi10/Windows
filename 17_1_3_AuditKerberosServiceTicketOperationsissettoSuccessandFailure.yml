@@ -1,19 +1,7 @@
 ---
-- name: Configurar la auditoría de operaciones de tickets de servicio Kerberos para 'Success and Failure'
+- name: Asegurar que la auditoría de auditoría de las operaciones de tickets de servicio Kerberos registre 'Success and Failure'
   hosts: all
   gather_facts: no
   tasks:
-    - name: Verificar la configuración actual de auditoría para 'Kerberos Service Ticket Operations'
-      win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Kerberos Service Ticket Operations" | Select-String -Pattern "Success and Failure"
-        if (!$currentStatus) {
-          auditpol /set /subcategory:"Kerberos Service Ticket Operations" /success:enable /failure:enable
-          Write-Output "Configuración de auditoría ajustada a 'Success and Failure'"
-        } else {
-          Write-Output "La auditoría ya está configurada para 'Success and Failure'"
-        }
-      register: audit_result
-
-    - name: Verificar que la configuración se ajustó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría de las operaciones de tickets de servicio Kerberos
+      win_shell: auditpol /set /subcategory:”Auditoría de las operaciones de tickets de servicio Kerberos" /success:enable /failure:enable
