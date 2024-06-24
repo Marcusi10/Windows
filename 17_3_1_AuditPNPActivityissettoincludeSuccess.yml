@@ -1,20 +1,7 @@
 ---
-- name: Configurar la auditoría para 'Audit PNP Activity' para 'Success'
+- name: Asegurar que la auditoría de Eventos Plug and Play registre 'Success'
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit PNP Activity'
-      win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Plug and Play" | Select-String -Pattern "Success"
-        if (!$currentStatus) {
-          auditpol /set /subcategory:"Plug and Play" /success:enable
-          Write-Output "Configuración de auditoría ajustada a 'Success'"
-        } else {
-          Write-Output "La auditoría ya está configurada para 'Success'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Eventos Plug and Play
+      win_shell: auditpol /set /subcategory:”Eventos Plug and Play” /success:enable
