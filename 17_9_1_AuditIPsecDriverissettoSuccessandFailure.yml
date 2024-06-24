@@ -1,29 +1,7 @@
 ---
-- name: Configurar auditoría para 'Audit IPsec Driver' para 'Success and Failure'
+- name: Asegurar que la auditoría de Controlador IPsec ’Success and Failure’
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit IPsec Driver'
-      win_shell: |
-        $currentSuccess = auditpol /get /subcategory:"IPsec Driver" | Select-String -Pattern "Success"
-        $currentFailure = auditpol /get /subcategory:"IPsec Driver" | Select-String -Pattern "Failure"
-        
-        if (!$currentSuccess) {
-          auditpol /set /subcategory:"IPsec Driver" /success:enable
-          Write-Output "Configuración de auditoría ajustada para 'Success'"
-        } else {
-          Write-Output "'Success' ya está configurado para 'Audit IPsec Driver'"
-        }
-        
-        if (!$currentFailure) {
-          auditpol /set /subcategory:"IPsec Driver" /failure:enable
-          Write-Output "Configuración de auditoría ajustada para 'Failure'"
-        } else {
-          Write-Output "'Failure' ya está configurado para 'Audit IPsec Driver'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría de Controlador IPsec
+      win_shell: auditpol /set /subcategory:”Controlador IPsec” /success:enable /failure:enable
