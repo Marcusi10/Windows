@@ -1,20 +1,7 @@
 ---
-- name: Configurar la auditoría para 'Audit Logoff' para 'Success'
+- name: Asegurar que la auditoría de Cerrar sesión registre ’Success’
   hosts: all
   gather_facts: no
-
   tasks:
-    - name: Verificar la configuración actual para 'Audit Logoff'
-      win_shell: |
-        $currentStatus = auditpol /get /subcategory:"Logoff" | Select-String -Pattern "Success"
-        if (!$currentStatus) {
-          auditpol /set /subcategory:"Logoff" /success:enable
-          Write-Output "Configuración de auditoría ajustada a 'Success'"
-        } else {
-          Write-Output "La auditoría ya está configurada para 'Success'"
-        }
-      register: audit_result
-
-    - name: Confirmar que la configuración se realizó correctamente
-      debug:
-        msg: "{{ audit_result.stdout }}"
+    - name: Configurar la política de auditoría Cerrar sesión
+      win_shell: auditpol /set /subcategory:”Cerrar sesión” /success:enable
