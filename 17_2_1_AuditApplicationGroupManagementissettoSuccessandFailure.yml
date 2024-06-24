@@ -1,6 +1,7 @@
-- name: Asegurar que la auditoría de 'Audit Application Group Management' registre 'Success and Failure'
+---
+- name: Asegurar que la auditoría de Administración de grupos de aplicaciones registre 'Success'
   hosts: all
   gather_facts: no
   tasks:
-    - name: Configurar la política de auditoría de 'Audit Application Group Management'
-      win_shell: auditpol /set /subcategory:'Audit Application Group Management' /success:enable /failure:enable
+    - name: Configurar la política de auditoría Administración de grupos de aplicaciones
+      win_shell: auditpol /set /subcategory:”Administración de grupos de aplicaciones” /success:enable /failure:enable
