@@ -1,5 +1,5 @@
 ---
-- name: Asegurar que la auditoría de Uso de privilegio confidencial” ’Success and Failure’
+- name: Asegurar que la auditoría de Uso de privilegio confidencial ’Success and Failure’
   hosts: all
   gather_facts: no
   tasks:
